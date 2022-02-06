@@ -16,10 +16,19 @@ content-type: application/json
 }
 
 ###
-PUT http://localhost:3001/api/persons
+POST http://localhost:3001/api/persons
 content-type: application/json
 
 {
     "name": "Boob",
     "number": "1234"
+}
+
+###
+PUT  http://localhost:3001/api/persons/61fa6b25dbced80ae0e30de6
+content-type: application/json
+
+{
+    "name": "Marilyn",
+    "number": "Moonroe"
 }

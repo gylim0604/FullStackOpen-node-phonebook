@@ -29,12 +29,6 @@ const errorHandler = (error, request, response, next) => {
 
 app.use(errorHandler);
 
-const generateRandom = (max, min) => {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min) + min);
-};
-
 app.get('/', (request, response) => {
     response.send('<h1>Hello World! </h1>');
 });
@@ -79,15 +73,17 @@ app.post('/api/persons', (request, response, next) => {
         name: body.name,
         number: body.number,
     });
-    Person.findOne({ name: body.name }).then((response) => {
-        if (!response) {
+    Person.findOne({ name: body.name }).then((res) => {
+        if (!res) {
+            console.log('person not found');
             person.save().then((savedPerson) => {
                 response.json(savedPerson);
             });
+        } else {
+            response.status(400).json({
+                error: 'Person already exist',
+            });
         }
-    });
-    response.status(400).json({
-        error: 'Person already exist',
     });
 });
 
@@ -103,10 +99,10 @@ app.put('/api/persons/:id', (request, response, next) => {
             error: 'number missing!',
         });
     }
-    const person = new Person({
+    const person = {
         name: body.name,
         number: body.number,
-    });
+    };
     Person.findByIdAndUpdate(request.params.id, person, { new: true })
         .then((updatedPerson) => {
             response.json(updatedPerson);
