@@ -36,7 +36,7 @@ app.get('/', (request, response) => {
 app.get('/info', (request, response) => {
     response.send(
         `<p>Phonebook has info for ${
-            persons.length
+            response.length
         } people.<br/> </p> ${new Date().toString()}`
     );
 });
@@ -113,9 +113,9 @@ app.put('/api/persons/:id', (request, response, next) => {
         .catch((error) => next(error));
 });
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
     Person.findByIdAndRemove(request.params.id)
-        .then((result) => {
+        .then(() => {
             response.status(204).end();
         })
         .catch((error) => next(error));
