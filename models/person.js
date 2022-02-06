@@ -14,8 +14,20 @@ mongoose
     });
 
 const personSchema = new mongoose.Schema({
-    name: String,
-    number: String,
+    name: {
+        type: String,
+        minlength: 3,
+    },
+    number: {
+        type: String,
+        minlength: 8,
+        validate: {
+            validator: function (v) {
+                return /\d{2,3}-\d*/.test(v);
+            },
+            message: (props) => `${props.value} is not a valid phone number!`,
+        },
+    },
 });
 
 personSchema.set('toJSON', {
@@ -25,5 +37,6 @@ personSchema.set('toJSON', {
         delete returnedObject.__v;
     },
 });
+let Person = mongoose.model('Person', personSchema);
 
-module.exports = mongoose.model('Person', personSchema);
+module.exports = Person;
